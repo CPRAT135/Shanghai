@@ -1,0 +1,8 @@
+{
+  "name": "Remix Shanghai — Arsip Arsitektur \u0026 Panduan Editorial",
+  "description": "Panduan perjalanan editorial futuristik berfokus tipografi monokrom yang menampilkan destinasi ikonik Shanghai, telemetri waktu nyata UTC+8, dan audio spasial Web Audio API.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

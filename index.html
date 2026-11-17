@@ -1,0 +1,2203 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shanghai — Arsip Arsitektur &amp; Panduan Editorial</title>
+    <meta
+      name="description"
+      content="Panduan perjalanan editorial futuristik berfokus tipografi monokrom yang menampilkan destinasi ikonik Shanghai, telemetri waktu nyata UTC+8, dan audio spasial Web Audio API."
+    />
+    <meta property="og:title" content="Shanghai — Arsip Arsitektur &amp; Panduan Editorial" />
+    <meta
+      property="og:description"
+      content="Panduan perjalanan editorial futuristik berfokus tipografi monokrom yang menampilkan destinasi ikonik Shanghai, telemetri waktu nyata UTC+8, dan audio spasial Web Audio API."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-primary: #ffffff;
+        --text-primary: #000000;
+        --text-secondary: #525252;
+        --text-muted: #737373;
+        --divider: rgba(0, 0, 0, 0.1);
+        --footer-bg: #0a0a0a;
+        --footer-text: #ffffff;
+        --footer-divider: rgba(255, 255, 255, 0.1);
+        --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: var(--font-sans);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.5;
+        overflow-x: hidden;
+        cursor: none;
+      }
+
+      body.is-locked {
+        overflow: hidden;
+      }
+
+      a,
+      button,
+      [role='button'],
+      .destination-card,
+      .marquee-card {
+        cursor: none;
+        font-family: inherit;
+      }
+
+      button {
+        background: none;
+        border: none;
+        color: inherit;
+      }
+
+      button:focus-visible,
+      a:focus-visible {
+        outline: 1px solid currentColor;
+        outline-offset: 4px;
+      }
+
+      .mono-meta {
+        font-family: var(--font-mono);
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        line-height: 1.4;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Custom Interactive Difference Cursor */
+      #custom-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        background-color: #ffffff;
+        border: 1px solid #000000;
+        mix-blend-mode: difference;
+        opacity: 0;
+        transform: translate3d(-100px, -100px, 0) scale(1);
+        transition: opacity 500ms var(--ease-editorial);
+        will-change: transform;
+      }
+
+      #custom-cursor.is-visible {
+        opacity: 1;
+      }
+
+      @media (hover: none), (pointer: coarse) {
+        body,
+        a,
+        button,
+        [role='button'],
+        .destination-card,
+        .marquee-card {
+          cursor: auto;
+        }
+        #custom-cursor {
+          display: none !important;
+        }
+      }
+
+      /* Entry Curtain */
+      #entry-curtain {
+        position: fixed;
+        inset: 0;
+        z-index: 500;
+        background-color: #0a0a0a;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 24px;
+        text-align: center;
+        opacity: 1;
+        transform: translateY(0);
+        transition:
+          opacity 800ms var(--ease-editorial),
+          transform 800ms var(--ease-editorial),
+          visibility 800ms var(--ease-editorial);
+      }
+
+      #entry-curtain.is-dismissed {
+        opacity: 0;
+        transform: translateY(-24px);
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .curtain-inner {
+        max-width: 720px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+      }
+
+      .curtain-coords {
+        color: #ffffff;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .curtain-title {
+        font-size: clamp(32px, 5vw, 56px);
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        line-height: 0.95;
+        color: #ffffff;
+        text-wrap: balance;
+        max-width: 640px;
+      }
+
+      .curtain-subtitle {
+        font-size: 16px;
+        color: #a3a3a3;
+        max-width: 520px;
+        line-height: 1.5;
+        letter-spacing: -0.02em;
+      }
+
+      .curtain-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        margin-top: 8px;
+      }
+
+      .curtain-btn-primary {
+        padding: 16px 28px;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        color: #ffffff;
+        background-color: transparent;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        min-height: 48px;
+        transition:
+          background-color 500ms var(--ease-editorial),
+          color 500ms var(--ease-editorial),
+          border-color 500ms var(--ease-editorial);
+      }
+
+      .curtain-btn-primary:hover {
+        background-color: #ffffff;
+        color: #0a0a0a;
+        border-color: #ffffff;
+      }
+
+      .curtain-btn-secondary {
+        padding: 10px 16px;
+        color: #a3a3a3;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        min-height: 44px;
+        transition: color 500ms var(--ease-editorial);
+      }
+
+      .curtain-btn-secondary:hover {
+        color: #ffffff;
+      }
+
+      /* Fixed Navigation Header */
+      .site-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        mix-blend-mode: difference;
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        pointer-events: none;
+      }
+
+      @media (min-width: 768px) {
+        .site-header {
+          padding: 24px 48px;
+        }
+      }
+
+      .site-header a,
+      .site-header button {
+        pointer-events: auto;
+      }
+
+      .brand-logo {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        line-height: 1;
+        color: #ffffff;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .sound-toggle {
+        color: #ffffff;
+        padding: 8px 4px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+        transition: opacity 500ms var(--ease-editorial);
+      }
+
+      .sound-toggle:hover {
+        opacity: 0.65;
+      }
+
+      .menu-toggle {
+        width: 44px;
+        height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+      }
+
+      .menu-plus-icon {
+        width: 24px;
+        height: 24px;
+        display: block;
+        transition: transform 500ms var(--ease-editorial);
+      }
+
+      .menu-toggle[aria-expanded='true'] .menu-plus-icon {
+        transform: rotate(45deg);
+      }
+
+      /* Full-screen Monochrome Navigation Overlay */
+      #nav-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 90;
+        background-color: #0a0a0a;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 112px 24px 36px;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-16px);
+        transition:
+          opacity 600ms var(--ease-editorial),
+          transform 600ms var(--ease-editorial),
+          visibility 600ms var(--ease-editorial);
+      }
+
+      @media (min-width: 768px) {
+        #nav-overlay {
+          padding: 120px 48px 48px;
+        }
+      }
+
+      #nav-overlay.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      .nav-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        max-width: 960px;
+      }
+
+      .nav-item {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .nav-item:first-child {
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 20px 0;
+        color: #ffffff;
+        text-decoration: none;
+        transition:
+          transform 500ms var(--ease-editorial),
+          color 500ms var(--ease-editorial);
+      }
+
+      .nav-link:hover {
+        transform: translateX(14px);
+        color: #a3a3a3;
+      }
+
+      .nav-link-title {
+        font-size: clamp(28px, 4.5vw, 52px);
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        line-height: 0.95;
+      }
+
+      .nav-link-index {
+        color: #737373;
+      }
+
+      .nav-overlay-footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 16px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: #a3a3a3;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 120px 24px 64px;
+        background-color: var(--bg-primary);
+        text-align: center;
+        scroll-margin-top: 96px;
+      }
+
+      .hero-kicker {
+        color: var(--text-muted);
+        margin-bottom: 24px;
+      }
+
+      .hero-headline {
+        font-size: clamp(56px, 12vw, 220px);
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        line-height: 0.9;
+        color: var(--text-primary);
+        display: inline-flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        user-select: none;
+      }
+
+      .char-mask {
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: bottom;
+        padding-bottom: 0.04em;
+      }
+
+      .char-inner {
+        display: inline-block;
+        transform: translateY(105%);
+        transition: transform 1000ms var(--ease-editorial);
+        will-change: transform;
+      }
+
+      body.is-revealed .char-inner {
+        transform: translateY(0%);
+      }
+
+      .hero-subheadline {
+        font-size: clamp(18px, 2vw, 24px);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.45;
+        color: var(--text-secondary);
+        margin-top: 32px;
+        max-width: 720px;
+        text-wrap: balance;
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 900ms var(--ease-editorial) 320ms,
+          transform 900ms var(--ease-editorial) 320ms;
+      }
+
+      body.is-revealed .hero-subheadline {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Infinite Project Marquee */
+      .marquee-section {
+        width: 100%;
+        overflow: hidden;
+        border-top: 1px solid var(--divider);
+        border-bottom: 1px solid var(--divider);
+        padding: 64px 0;
+        background-color: var(--bg-primary);
+        scroll-margin-top: 96px;
+      }
+
+      .marquee-header {
+        max-width: 1344px;
+        margin: 0 auto 32px;
+        padding: 0 24px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px 16px;
+        color: var(--text-muted);
+      }
+
+      @media (max-width: 639px) {
+        .marquee-header {
+          font-size: 12px;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .marquee-header {
+          padding: 0 48px;
+        }
+      }
+
+      .marquee-track {
+        display: flex;
+        width: max-content;
+        animation: marqueeScroll 30s linear infinite;
+      }
+
+      .marquee-section:hover .marquee-track {
+        animation-play-state: paused;
+      }
+
+      @keyframes marqueeScroll {
+        0% {
+          transform: translate3d(0, 0, 0);
+        }
+        100% {
+          transform: translate3d(-50%, 0, 0);
+        }
+      }
+
+      .marquee-group {
+        display: flex;
+        align-items: stretch;
+      }
+
+      .marquee-card {
+        width: 220px;
+        flex-shrink: 0;
+        margin-right: 24px;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      @media (min-width: 768px) {
+        .marquee-card {
+          width: 300px;
+          margin-right: 32px;
+        }
+      }
+
+      .marquee-media {
+        width: 100%;
+        aspect-ratio: 5 / 7;
+        overflow: hidden;
+        background-color: #f4f4f4;
+        position: relative;
+      }
+
+      .marquee-shape-a {
+        border-top-left-radius: 100px;
+      }
+
+      .marquee-shape-b {
+        border-top-right-radius: 100px;
+        border-bottom-left-radius: 40px;
+      }
+
+      .marquee-shape-c {
+        border-radius: 40px;
+      }
+
+      .editorial-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(100%);
+        transform: scale(1);
+        transition:
+          filter 700ms var(--ease-editorial),
+          transform 700ms var(--ease-editorial);
+      }
+
+      .marquee-card:hover .editorial-photo,
+      .destination-card:hover .editorial-photo {
+        filter: grayscale(0%);
+        transform: scale(1.05);
+      }
+
+      .marquee-caption {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+        padding-top: 8px;
+        border-top: 1px solid var(--divider);
+      }
+
+      .marquee-title {
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--text-primary);
+      }
+
+      .marquee-code {
+        color: var(--text-muted);
+        white-space: nowrap;
+      }
+
+      /* Centered Introductory Statement */
+      .statement-section {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 120px 24px;
+        text-align: center;
+        scroll-margin-top: 96px;
+      }
+
+      .statement-kicker {
+        color: var(--text-muted);
+        margin-bottom: 28px;
+      }
+
+      .statement-heading {
+        font-size: clamp(28px, 4vw, 48px);
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        line-height: 1.02;
+        color: var(--text-primary);
+        margin-bottom: 32px;
+        text-wrap: balance;
+      }
+
+      .line-mask {
+        display: block;
+        overflow: hidden;
+      }
+
+      .line-inner {
+        display: block;
+        transform: translateY(105%);
+        transition: transform 900ms var(--ease-editorial);
+      }
+
+      .statement-section.is-inview .line-inner {
+        transform: translateY(0%);
+      }
+
+      .statement-body {
+        font-size: 18px;
+        line-height: 1.65;
+        letter-spacing: -0.02em;
+        color: var(--text-secondary);
+        max-width: 66ch;
+        margin: 0 auto;
+      }
+
+      /* Destination Project Grid */
+      .grid-section {
+        max-width: 1344px;
+        margin: 0 auto;
+        padding: 40px 24px 128px;
+        scroll-margin-top: 96px;
+      }
+
+      @media (min-width: 768px) {
+        .grid-section {
+          padding: 48px 48px 144px;
+        }
+      }
+
+      .section-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding-bottom: 20px;
+        margin-bottom: 48px;
+        border-bottom: 1px solid var(--divider);
+      }
+
+      .section-title {
+        font-size: clamp(28px, 3vw, 40px);
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        line-height: 0.95;
+        color: var(--text-primary);
+      }
+
+      .section-count {
+        color: var(--text-muted);
+      }
+
+      .destination-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 56px;
+      }
+
+      @media (min-width: 768px) {
+        .destination-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 64px 40px;
+        }
+      }
+
+      .destination-card {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        width: 100%;
+        padding: 0;
+      }
+
+      .destination-media {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+        background-color: #f4f4f4;
+      }
+
+      .destination-overlay {
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transition: opacity 500ms var(--ease-editorial);
+        pointer-events: none;
+      }
+
+      .destination-card:hover .destination-overlay {
+        opacity: 1;
+      }
+
+      .card-arrow-badge {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #ffffff;
+        border: 1px solid var(--divider);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000000;
+        opacity: 0;
+        transform: translate(-6px, 6px);
+        transition:
+          opacity 500ms var(--ease-editorial),
+          transform 500ms var(--ease-editorial);
+        pointer-events: none;
+      }
+
+      .destination-card:hover .card-arrow-badge,
+      .destination-card:focus-visible .card-arrow-badge {
+        opacity: 1;
+        transform: translate(0, 0);
+      }
+
+      .destination-meta-row {
+        border-top: 1px solid var(--divider);
+        padding-top: 16px;
+        margin-top: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .destination-title {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 1.1;
+        color: var(--text-primary);
+        margin-bottom: 6px;
+      }
+
+      .destination-category {
+        font-size: 14px;
+        color: var(--text-secondary);
+        letter-spacing: -0.01em;
+      }
+
+      .destination-code {
+        color: var(--text-muted);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      /* Editorial Briefing Modal */
+      #briefing-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 250;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        background-color: rgba(10, 10, 10, 0.72);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition:
+          opacity 500ms var(--ease-editorial),
+          visibility 500ms var(--ease-editorial);
+      }
+
+      #briefing-modal.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      .modal-panel {
+        background-color: #ffffff;
+        color: #000000;
+        width: 100%;
+        max-width: 920px;
+        max-height: 90vh;
+        overflow-y: auto;
+        border: 1px solid var(--divider);
+        padding: 24px;
+        transform: translateY(24px);
+        transition: transform 600ms var(--ease-editorial);
+      }
+
+      @media (min-width: 768px) {
+        .modal-panel {
+          padding: 40px;
+        }
+      }
+
+      #briefing-modal.is-open .modal-panel {
+        transform: translateY(0);
+      }
+
+      .modal-top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--divider);
+      }
+
+      .modal-close-btn {
+        padding: 10px 16px;
+        border: 1px solid var(--divider);
+        min-height: 44px;
+        color: #000000;
+        transition:
+          background-color 500ms var(--ease-editorial),
+          color 500ms var(--ease-editorial);
+      }
+
+      .modal-close-btn:hover {
+        background-color: #000000;
+        color: #ffffff;
+      }
+
+      .modal-hero-frame {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 6px;
+        overflow: hidden;
+        margin: 24px 0;
+        background-color: #f4f4f4;
+      }
+
+      .modal-hero-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0%);
+      }
+
+      .modal-title {
+        font-size: clamp(28px, 4vw, 44px);
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        line-height: 0.95;
+        margin-bottom: 10px;
+      }
+
+      .modal-category {
+        color: var(--text-secondary);
+        margin-bottom: 28px;
+      }
+
+      .modal-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding-top: 24px;
+        border-top: 1px solid var(--divider);
+      }
+
+      @media (min-width: 768px) {
+        .modal-grid {
+          grid-template-columns: 1.35fr 1fr;
+          gap: 40px;
+        }
+      }
+
+      .modal-label {
+        color: var(--text-muted);
+        margin-bottom: 10px;
+      }
+
+      .modal-description {
+        font-size: 16px;
+        line-height: 1.65;
+        color: var(--text-primary);
+      }
+
+      .modal-specs {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .modal-spec-item {
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--divider);
+      }
+
+      .modal-spec-value {
+        font-size: 15px;
+        color: var(--text-primary);
+        line-height: 1.5;
+      }
+
+      .modal-highlights {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .modal-highlights li {
+        font-size: 15px;
+        color: var(--text-secondary);
+        padding-left: 16px;
+        position: relative;
+      }
+
+      .modal-highlights li::before {
+        content: '—';
+        position: absolute;
+        left: 0;
+        color: var(--text-muted);
+      }
+
+      /* Footer */
+      .site-footer {
+        background-color: var(--footer-bg);
+        color: var(--footer-text);
+        padding: 80px 24px 36px;
+      }
+
+      @media (min-width: 768px) {
+        .site-footer {
+          padding: 96px 48px 40px;
+        }
+      }
+
+      .footer-inner {
+        max-width: 1344px;
+        margin: 0 auto;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 48px;
+        padding-bottom: 64px;
+      }
+
+      @media (min-width: 768px) {
+        .footer-grid {
+          grid-template-columns: 1fr 1fr 1fr 1fr;
+          gap: 40px;
+        }
+      }
+
+      .footer-brand-col {
+        grid-column: span 1;
+      }
+
+      @media (min-width: 768px) {
+        .footer-brand-col {
+          grid-column: span 2;
+        }
+      }
+
+      .footer-brand {
+        font-size: clamp(40px, 5vw, 64px);
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        line-height: 0.9;
+        color: #ffffff;
+        margin-bottom: 20px;
+      }
+
+      .footer-bio {
+        color: #a3a3a3;
+        max-width: 440px;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .footer-heading {
+        color: #737373;
+        margin-bottom: 20px;
+      }
+
+      .footer-links {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .footer-link {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 15px;
+        display: inline-block;
+        padding: 2px 0;
+        transition:
+          color 500ms var(--ease-editorial),
+          transform 500ms var(--ease-editorial);
+      }
+
+      .footer-link:hover {
+        color: #a3a3a3;
+        transform: translateX(6px);
+      }
+
+      .telemetry-clock {
+        font-family: var(--font-mono);
+        font-size: 20px;
+        letter-spacing: 0.08em;
+        color: #ffffff;
+        margin-bottom: 12px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .telemetry-coords {
+        color: #a3a3a3;
+      }
+
+      .footer-bottom {
+        border-top: 1px solid var(--footer-divider);
+        padding-top: 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        font-size: 14px;
+        color: #a3a3a3;
+      }
+
+      @media (min-width: 768px) {
+        .footer-bottom {
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .marquee-track {
+          animation: none;
+        }
+        .char-inner,
+        .line-inner,
+        .hero-subheadline {
+          transform: none !important;
+          opacity: 1 !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="is-locked" id="top">
+    <!-- Custom Difference Cursor -->
+    <div id="custom-cursor" aria-hidden="true"></div>
+
+    <!-- Minimalist Editorial Entry Curtain -->
+    <div id="entry-curtain" role="dialog" aria-modal="true" aria-label="Gerbang Masuk Arsip Shanghai">
+      <div class="curtain-inner">
+        <p class="curtain-coords">SHANGHAI — 31.2304° N, 121.4737° E</p>
+        <h2 class="curtain-title">Arsip Arsitektur &amp; Panduan Editorial</h2>
+        <p class="curtain-subtitle">
+          Dokumentasi ruang futuristik, cakrawala supertall, dan warisan urban di tepian Sungai Huangpu.
+        </p>
+        <div class="curtain-actions">
+          <button id="enter-with-sound" type="button" class="curtain-btn-primary">
+            [ ENTER ARCHIVE — WITH SOUND ]
+          </button>
+          <button id="enter-silently" type="button" class="curtain-btn-secondary">
+            [ ENTER SILENTLY ]
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fixed Navigation Header -->
+    <header class="site-header">
+      <a href="#top" class="brand-logo" aria-label="Shanghai Beranda">sh</a>
+      <div class="header-controls">
+        <button
+          id="sound-toggle"
+          type="button"
+          class="sound-toggle mono-meta"
+          aria-pressed="false"
+          aria-label="Aktifkan atau nonaktifkan audio spasial"
+        >
+          SOUND: OFF
+        </button>
+        <button
+          id="menu-toggle"
+          type="button"
+          class="menu-toggle"
+          aria-expanded="false"
+          aria-controls="nav-overlay"
+          aria-label="Buka menu navigasi"
+        >
+          <svg
+            class="menu-plus-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1"
+            aria-hidden="true"
+          >
+            <line x1="12" y1="3" x2="12" y2="21"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Full-Screen Monochrome Navigation Overlay -->
+    <nav id="nav-overlay" aria-label="Navigasi Utama" aria-hidden="true">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="#hero" class="nav-link">
+            <span class="nav-link-title">Beranda</span>
+            <span class="nav-link-index mono-meta">01 / PROLOG</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#marquee" class="nav-link">
+            <span class="nav-link-title">Galeri Cakrawala</span>
+            <span class="nav-link-index mono-meta">02 / VISUAL</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#statement" class="nav-link">
+            <span class="nav-link-title">Manifesto Urban</span>
+            <span class="nav-link-index mono-meta">03 / ESAI</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#destinasi" class="nav-link">
+            <span class="nav-link-title">Destinasi Ikonik</span>
+            <span class="nav-link-index mono-meta">04 / 06 SEKTOR</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#footer" class="nav-link">
+            <span class="nav-link-title">Telemetri &amp; Arsip</span>
+            <span class="nav-link-index mono-meta">05 / UTC+8</span>
+          </a>
+        </li>
+      </ul>
+      <div class="nav-overlay-footer mono-meta">
+        <span>31.2304° N, 121.4737° E</span>
+        <span id="overlay-clock">00:00:00 CST</span>
+      </div>
+    </nav>
+
+    <main>
+      <!-- Hero Section -->
+      <section id="hero" class="hero-section">
+        <p class="hero-kicker mono-meta">ARSIP ARSITEKTUR SHANGHAI · 31.2304° N, 121.4737° E</p>
+        <h1 class="hero-headline" aria-label="SHANGHAI">
+          <span class="char-mask"><span class="char-inner" style="transition-delay: 0ms">S</span></span>
+          <span class="char-mask"><span class="char-inner" style="transition-delay: 45ms">H</span></span>
+          <span class="char-mask"><span class="char-inner" style="transition-delay: 90ms">A</span></span>
+          <span class="char-mask"><span class="char-inner" style="transition-delay: 135ms">N</span></span>
+          <span class="char-mask"><span class="char-inner" style="transition-delay: 180ms">G</span></span>
+          <span class="char-mask"><span class="char-inner" style="transition-delay: 225ms">H</span></span>
+          <span class="char-mask"><span class="char-inner" style="transition-delay: 270ms">A</span></span>
+          <span class="char-mask"><span class="char-inner" style="transition-delay: 315ms">I</span></span>
+        </h1>
+        <p class="hero-subheadline">
+          Eksplorasi arsitektur masa depan, cakrawala hiper-modern, dan warisan dinasti di jantung metropolis Tiongkok.
+        </p>
+      </section>
+
+      <!-- Infinite Project Marquee -->
+      <section id="marquee" class="marquee-section" aria-label="Galeri Berjalan Destinasi Shanghai">
+        <div class="marquee-header mono-meta">
+          <span>SEKSI 01 · KORIDOR VISUAL</span>
+          <span>ARAHKAN KURSOR UNTUK WARNA</span>
+        </div>
+        <div class="marquee-track" id="marquee-track"></div>
+      </section>
+
+      <!-- Centered Introductory Statement -->
+      <section id="statement" class="statement-section">
+        <p class="statement-kicker mono-meta">LABORATORIUM MASA DEPAN · SUNGAI HUANGPU</p>
+        <h2 class="statement-heading">
+          <span class="line-mask"><span class="line-inner" style="transition-delay: 0ms">Di mana fasad neoklasik</span></span>
+          <span class="line-mask"><span class="line-inner" style="transition-delay: 90ms">Waitan berdialog dengan</span></span>
+          <span class="line-mask"><span class="line-inner" style="transition-delay: 180ms">menara kaca Pudong.</span></span>
+        </h2>
+        <p class="statement-body">
+          Shanghai adalah laboratorium urban yang terus menulis ulang batas antara masa lalu dan masa depan. Dari presisi brutalist bekas rumah jagal tahun 1933 hingga spiral aerodinamis Shanghai Tower setinggi 632 meter, setiap sudut kota ini menyimpan narasi struktural yang layak dijelajahi secara perlahan.
+        </p>
+      </section>
+
+      <!-- Destination Project Grid -->
+      <section id="destinasi" class="grid-section">
+        <div class="section-bar">
+          <h2 class="section-title">Destinasi Terpilih</h2>
+          <span class="section-count mono-meta">06 SEKTOR</span>
+        </div>
+        <div class="destination-grid" id="destination-grid"></div>
+      </section>
+    </main>
+
+    <!-- Editorial Briefing Modal -->
+    <div
+      id="briefing-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      aria-hidden="true"
+    >
+      <div class="modal-panel">
+        <div class="modal-top-bar">
+          <span id="modal-code" class="mono-meta">SECTOR</span>
+          <button id="modal-close" type="button" class="modal-close-btn mono-meta">
+            TUTUP [ESC]
+          </button>
+        </div>
+        <div class="modal-hero-frame">
+          <img id="modal-image" class="modal-hero-img" src="" alt="" />
+        </div>
+        <h3 id="modal-title" class="modal-title"></h3>
+        <p id="modal-category" class="modal-category mono-meta"></p>
+        <div class="modal-grid">
+          <div>
+            <p class="modal-label mono-meta">DESKRIPSI ARSITEKTUR</p>
+            <p id="modal-description" class="modal-description"></p>
+          </div>
+          <div class="modal-specs">
+            <div class="modal-spec-item">
+              <p class="modal-label mono-meta">WAKTU KUNJUNGAN TERBAIK</p>
+              <p id="modal-best-time" class="modal-spec-value"></p>
+            </div>
+            <div class="modal-spec-item">
+              <p class="modal-label mono-meta">JALUR METRO SHANGHAI</p>
+              <p id="modal-metro" class="modal-spec-value"></p>
+            </div>
+            <div>
+              <p class="modal-label mono-meta">SOROTAN UTAMA</p>
+              <ul id="modal-highlights" class="modal-highlights"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer" class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand-col">
+            <p class="footer-brand">shanghai.</p>
+            <p class="footer-bio">
+              Edisi kuratorial eksplorasi urban futuristik. Menyajikan catatan arsitektur, rute transit presisi, dan panduan destinasi berkarakter di kota metropolitan Shanghai.
+            </p>
+          </div>
+          <div>
+            <p class="footer-heading mono-meta">DESTINASI</p>
+            <ul class="footer-links" id="footer-dest-links"></ul>
+          </div>
+          <div>
+            <p class="footer-heading mono-meta">TELEMETRI</p>
+            <p id="shanghai-clock" class="telemetry-clock">00:00:00 CST</p>
+            <p class="telemetry-coords mono-meta">31.2304° N, 121.4737° E</p>
+            <p class="telemetry-coords mono-meta" style="margin-top: 8px">ZONA WAKTU: UTC+8</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 SHANGHAI ARSIP EDITORIAL. HAK CIPTA DILINDUNGI.</span>
+          <span>EDISI MONOKROM · BAHASA INDONESIA · KOORDINAT AKTIF</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        'use strict';
+
+        // 1. Data Destinasi Ikonik Shanghai
+        const DESTINATIONS = [
+          {
+            id: 'lujiazui',
+            title: 'Lujiazui & Shanghai Tower',
+            category: 'Skyline / Distrik Keuangan Pudong',
+            code: '2099 SECTOR 01',
+            image: '/images/shanghai_lujiazui_tower_1794638679436.jpg',
+            alt: 'Cakrawala futuristik Lujiazui dan menara Shanghai Tower saat senja',
+            architecture:
+              'Dirancang oleh studio Gensler, Shanghai Tower menjulang 632 meter dengan fasad kaca berlapis ganda yang memutar 120 derajat untuk meredam beban angin hingga 24 persen. Dikelilingi oleh Jin Mao Tower dan Shanghai World Financial Center, koridor Lujiazui merupakan manifestasi vertikal paling progresif di Asia Timur.',
+            bestTime: '17:30 – 20:30 CST (Transisi senja menuju iluminasi fasad penuh)',
+            metro: 'Jalur 2 & Jalur 14 — Stasiun Lujiazui (Pintu Keluar 6, akses langsung jembatan layang pejalan kaki)',
+            highlights: [
+              'Dek observasi Top of Shanghai di lantai 118 dengan lift berkecepatan 20,5 m/detik',
+              'Atrium taman langit vertikal yang membentang di sepanjang zona transisi bangunan',
+              'Koridor pejalan kaki melingkar di atas persimpangan Lujiazui untuk fotografi sudut lebar'
+            ]
+          },
+          {
+            id: 'the-bund',
+            title: 'The Bund (Waitan)',
+            category: 'Waterfront / Tepi Sungai Huangpu',
+            code: '31.2397° N',
+            image: '/images/shanghai_the_bund_1794638680117.jpg',
+            alt: 'Promenade The Bund Waitan di Shanghai dengan bangunan bersejarah dan pemandangan Pudong',
+            architecture:
+              'Bentangan sepanjang 1,5 kilometer di tepi barat Sungai Huangpu ini memamerkan 52 bangunan bersejarah bergaya Neoklasik, Beaux-Arts, dan Art Deco dari awal abad ke-20. Kontras antara dinding granit Customs House dan cakrawala kaca Pudong di seberang sungai menciptakan dialog arsitektur lintas era paling dramatis di dunia.',
+            bestTime: '06:00 – 07:30 CST (Pagi sunyi) atau 19:00 – 22:00 CST (Lampu kota menyala)',
+            metro: 'Jalur 2 & Jalur 10 — Stasiun East Nanjing Road (Pintu Keluar 2, jalan kaki 8 menit ke timur)',
+            highlights: [
+              'Fasad jam ikonik Customs House dan kubah tembaga bekas gedung HSBC',
+              'Promenade pejalan kaki dua tingkat menghadap langsung ke cakrawala Lujiazui',
+              'Jembatan Waibaidu dari rangka baja tahun 1907 di ujung utara kawasan Waitan'
+            ]
+          },
+          {
+            id: 'yu-garden',
+            title: 'Yu Garden (Yuyuan)',
+            category: 'Warisan Dinasti / Kota Tua',
+            code: 'MING 1559',
+            image: '/images/shanghai_yu_garden_1794638680704.jpg',
+            alt: 'Paviliun tradisional Dinasti Ming dan jembatan batu berliku di Yu Garden Shanghai',
+            architecture:
+              'Dibangun pada masa Dinasti Ming tahun 1559 oleh keluarga Pan, taman klasik Jiangnan seluas dua hektare ini menyusun ruang melalui dinding naga berukir, paviliun kayu beratap melengkung, serta formasi batu kapur Taihu berpori. Setiap jendela kisi berfungsi sebagai bingkai hidup yang mengatur komposisi visual secara presisi.',
+            bestTime: '08:30 – 10:30 CST (Saat cahaya pagi lembut menembus kabut tipis kolam teratai)',
+            metro: 'Jalur 10 & Jalur 14 — Stasiun Yuyuan Garden (Pintu Keluar 1 atau 7)',
+            highlights: [
+              'Batu giok berpori Exquisite Jade Rock setinggi 3,3 meter yang legendaris',
+              'Jembatan Sembilan Belokan (Nine-Turn Bridge) di atas kolam ikan koi dan rumah teh Huxinting',
+              'Dinding naga batu yang memisahkan enam zona taman dengan proporsi ruang intim'
+            ]
+          },
+          {
+            id: 'nanjing-road',
+            title: 'Nanjing Road Pedestrian',
+            category: 'Hiper-Ritel / Koridor Pusat',
+            code: 'ARTERI 5.5KM',
+            image: '/images/shanghai_nanjing_road_1794638681080.jpg',
+            alt: 'Jalan pejalan kaki Nanjing Road di pusat kota Shanghai pada waktu senja',
+            architecture:
+              'Sebagai arteri komersial tersibuk di Tiongkok, koridor pedestrian Nanjing Road menggabungkan struktur toserba bersejarah era 1920-an seperti Wing On dan Sincere dengan etalase kaca minimalis abad ke-21. Lapisan tipografi neon vertikal dan kanopi baja modern membentuk ruang publik berenergi tinggi.',
+            bestTime: '18:00 – 22:30 CST (Dinamika visual arsitektur cahaya kota)',
+            metro: 'Jalur 1, 2 & 8 — Stasiun People’s Square hingga East Nanjing Road',
+            highlights: [
+              'Kompleks Art Deco bersejarah Empat Toserba Besar di persimpangan utama',
+              'Ruang publik bebas kendaraan sepanjang koridor timur menuju The Bund',
+              'Galeri arsitektur komersial modern dan instalasi seni ruang terbuka'
+            ]
+          },
+          {
+            id: 'old-millfun',
+            title: '1933 Old Millfun',
+            category: 'Labirin Brutalis / Distrik Hongkou',
+            code: '1933 ARCH',
+            image: '/images/shanghai_old_millfun_1794638681603.jpg',
+            alt: 'Atrium beton mentah bertingkat dan tangga melingkar di dalam 1933 Old Millfun Shanghai',
+            architecture:
+              'Dirancang oleh arsitek Inggris Balfours pada tahun 1933 sebagai rumah pemotongan hewan termutakhir di Timur Jauh, bangunan beton bertulang tanpa balok ini menonjolkan kolom berongga berkepala payung, jembatan udara bersilang asimetris, dan atrium kaca berkisi yang membiaskan cahaya alami secara teatrikal.',
+            bestTime: '13:00 – 16:00 CST (Sudut cahaya matahari terbaik menembus kisi atap atrium)',
+            metro: 'Jalur 4 & Jalur 10 — Stasiun Hailun Road (Pintu Keluar 2, jalan kaki 10 menit)',
+            highlights: [
+              'Jembatan beton melayang yang saling bersilangan di ruang atrium setinggi lima lantai',
+              'Tangga spiral ganda dan lorong dengan dinding beton kasar bertekstur asli',
+              'Studio desain independen, galeri kontemporer, dan ruang teater di lantai atas'
+            ]
+          },
+          {
+            id: 'zhujiajiao',
+            title: 'Zhujiajiao Water Town',
+            category: 'Kota Kanal / Distrik Qingpu',
+            code: 'JIANGNAN',
+            image: '/images/shanghai_zhujiajiao_canal_1794638681851.jpg',
+            alt: 'Jembatan batu lengkung lima dan kanal air tenang di Zhujiajiao Water Town Shanghai',
+            architecture:
+              'Berusia lebih dari 1.700 tahun di tepi barat daya Shanghai, permukiman air Zhujiajiao ditopang oleh jaringan 36 jembatan batu kuno dan rumah berdinding kapur putih beratap genteng abu-abu gelap. Tata ruang vernakularnya menjaga keseimbangan alami antara jalur perahu kanal dan gang batu sempit.',
+            bestTime: '15:30 – 18:00 CST (Cahaya keemasan sore memantul di permukaan kanal)',
+            metro: 'Jalur 17 — Stasiun Zhujiajiao (Pintu Keluar 1, dilanjutkan jalan kaki 12 menit ke kawasan kanal)',
+            highlights: [
+              'Jembatan Fangsheng berkonstruksi lima lengkungan batu granit sejak tahun 1571',
+              'Kantor Pos Dinasti Qing dan Taman Kezhi di tepi aliran kanal utama',
+              'Perjalanan perahu dayung kayu menyusuri koridor rumah panggung tepi air'
+            ]
+          }
+        ];
+
+        // 2. Fallback SVG Generator (Zero broken image icons)
+        function buildFallbackSvg(title, code, index) {
+          const safeTitle = String(title || 'SHANGHAI').replace(/[<>&"']/g, '');
+          const safeCode = String(code || 'ARCHIVE').replace(/[<>&"']/g, '');
+          const mode = Math.abs(index || 0) % 3;
+          let geometry = '';
+
+          if (mode === 0) {
+            geometry =
+              '<line x1="120" y1="540" x2="120" y2="140" stroke="#000" stroke-width="1" stroke-opacity="0.35"/>' +
+              '<polygon points="360,540 400,70 440,540" fill="none" stroke="#000" stroke-width="1.2"/>' +
+              '<rect x="260" y="210" width="72" height="330" fill="none" stroke="#000" stroke-width="1" stroke-opacity="0.5"/>' +
+              '<rect x="470" y="160" width="64" height="380" fill="none" stroke="#000" stroke-width="1" stroke-opacity="0.5"/>';
+          } else if (mode === 1) {
+            geometry =
+              '<path d="M80 420 Q400 320 720 420" fill="none" stroke="#000" stroke-width="1.2"/>' +
+              '<path d="M160 420 Q400 220 640 420" fill="none" stroke="#000" stroke-width="1" stroke-opacity="0.45"/>' +
+              '<line x1="80" y1="450" x2="720" y2="450" stroke="#000" stroke-width="1" stroke-opacity="0.35"/>';
+          } else {
+            geometry =
+              '<rect x="180" y="130" width="440" height="320" fill="none" stroke="#000" stroke-width="1.1"/>' +
+              '<line x1="180" y1="130" x2="620" y2="450" stroke="#000" stroke-width="1" stroke-opacity="0.35"/>' +
+              '<line x1="620" y1="130" x2="180" y2="450" stroke="#000" stroke-width="1" stroke-opacity="0.35"/>' +
+              '<circle cx="400" cy="290" r="90" fill="none" stroke="#000" stroke-width="1"/>';
+          }
+
+          const svg =
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">' +
+            '<rect width="800" height="600" fill="#F4F4F4"/>' +
+            '<g stroke="#000000" stroke-opacity="0.08" stroke-width="1">' +
+            '<line x1="0" y1="150" x2="800" y2="150"/><line x1="0" y1="300" x2="800" y2="300"/><line x1="0" y1="450" x2="800" y2="450"/>' +
+            '<line x1="200" y1="0" x2="200" y2="600"/><line x1="400" y1="0" x2="400" y2="600"/><line x1="600" y1="0" x2="600" y2="600"/>' +
+            '</g>' +
+            geometry +
+            '<text x="48" y="64" font-family="monospace" font-size="14" letter-spacing="2" fill="#525252">' + safeCode + '</text>' +
+            '<text x="48" y="556" font-family="sans-serif" font-weight="700" font-size="22" letter-spacing="-1" fill="#000000">' + safeTitle + '</text>' +
+            '</svg>';
+
+          return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        }
+
+        window.handleImageFallback = function (imgEl, title, code, index) {
+          if (!imgEl || imgEl.dataset.fallbackApplied === 'true') return;
+          imgEl.dataset.fallbackApplied = 'true';
+          imgEl.src = buildFallbackSvg(title, code, index);
+        };
+
+        // 3. Native Web Audio API Synthesizer & Generative Background Music (Zero-Crack)
+        const audioEngine = {
+          ctx: null,
+          masterGain: null,
+          musicBus: null,
+          delayNode: null,
+          droneGain: null,
+          droneFilter: null,
+          padOscs: [],
+          noiseBuffer: null,
+          enabled: false,
+          droneStarted: false,
+          musicTimer: null,
+          stepIndex: 0,
+          lastTickAt: 0,
+
+          initContext: function () {
+            if (this.ctx) {
+              if (this.ctx.state === 'suspended') {
+                this.ctx.resume();
+              }
+              return;
+            }
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) return;
+
+            this.ctx = new AudioCtx();
+            const limiter = this.ctx.createDynamicsCompressor();
+            limiter.threshold.setValueAtTime(-14, this.ctx.currentTime);
+            limiter.knee.setValueAtTime(16, this.ctx.currentTime);
+            limiter.ratio.setValueAtTime(4, this.ctx.currentTime);
+            limiter.attack.setValueAtTime(0.004, this.ctx.currentTime);
+            limiter.release.setValueAtTime(0.18, this.ctx.currentTime);
+
+            this.masterGain = this.ctx.createGain();
+            this.masterGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+
+            this.masterGain.connect(limiter);
+            limiter.connect(this.ctx.destination);
+
+            // Spatial hall delay bus for ambient background music
+            this.musicBus = this.ctx.createGain();
+            this.musicBus.gain.setValueAtTime(1.0, this.ctx.currentTime);
+            this.musicBus.connect(this.masterGain);
+
+            this.delayNode = this.ctx.createDelay(1.0);
+            this.delayNode.delayTime.setValueAtTime(0.38, this.ctx.currentTime);
+
+            const feedback = this.ctx.createGain();
+            feedback.gain.setValueAtTime(0.42, this.ctx.currentTime);
+
+            const delayTone = this.ctx.createBiquadFilter();
+            delayTone.type = 'lowpass';
+            delayTone.frequency.setValueAtTime(1850, this.ctx.currentTime);
+
+            this.delayNode.connect(delayTone);
+            delayTone.connect(feedback);
+            feedback.connect(this.delayNode);
+            delayTone.connect(this.masterGain);
+
+            // Generate 1.2s white noise buffer once for air-whoosh sweeps
+            const sampleRate = this.ctx.sampleRate;
+            const length = Math.floor(sampleRate * 1.2);
+            const buffer = this.ctx.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < length; i++) {
+              data[i] = Math.random() * 2 - 1;
+            }
+            this.noiseBuffer = buffer;
+          },
+
+          startDrone: function () {
+            if (!this.ctx || this.droneStarted) return;
+            this.droneStarted = true;
+            const now = this.ctx.currentTime;
+
+            this.droneFilter = this.ctx.createBiquadFilter();
+            this.droneFilter.type = 'lowpass';
+            this.droneFilter.frequency.setValueAtTime(480, now);
+            this.droneFilter.Q.setValueAtTime(0.9, now);
+
+            const lfo = this.ctx.createOscillator();
+            const lfoGain = this.ctx.createGain();
+            lfo.type = 'sine';
+            lfo.frequency.setValueAtTime(0.09, now);
+            lfoGain.gain.setValueAtTime(180, now);
+            lfo.connect(lfoGain);
+            lfoGain.connect(this.droneFilter.frequency);
+            lfo.start(now);
+
+            this.droneGain = this.ctx.createGain();
+            this.droneGain.gain.setValueAtTime(0.0001, now);
+            this.droneGain.gain.exponentialRampToValueAtTime(0.24, now + 1.6);
+
+            const voices = [
+              { type: 'sine', freq: 110.0, level: 0.42 },
+              { type: 'triangle', freq: 164.81, level: 0.28 },
+              { type: 'sine', freq: 220.5, level: 0.22 },
+              { type: 'sine', freq: 329.63, level: 0.14 }
+            ];
+
+            this.padOscs = voices.map((v) => {
+              const osc = this.ctx.createOscillator();
+              const vGain = this.ctx.createGain();
+              osc.type = v.type;
+              osc.frequency.setValueAtTime(v.freq, now);
+              vGain.gain.setValueAtTime(v.level, now);
+              osc.connect(vGain);
+              vGain.connect(this.droneFilter);
+              osc.start(now);
+              return osc;
+            });
+
+            this.droneFilter.connect(this.droneGain);
+            this.droneGain.connect(this.musicBus);
+          },
+
+          playMusicNote: function (freq, durationSec, peakGain, waveform) {
+            if (!this.ctx || !this.enabled || this.ctx.state !== 'running') return;
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+
+            osc.type = waveform || 'sine';
+            osc.frequency.setValueAtTime(freq, now);
+
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.exponentialRampToValueAtTime(peakGain, now + 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + durationSec);
+
+            osc.connect(gain);
+            gain.connect(this.musicBus);
+            gain.connect(this.delayNode);
+
+            osc.start(now);
+            osc.stop(now + durationSec + 0.05);
+          },
+
+          startBackgroundMusic: function () {
+            this.startDrone();
+            if (this.musicTimer) return;
+
+            const bassProgression = [110.0, 87.31, 73.42, 82.41];
+            const fifthProgression = [164.81, 130.81, 110.0, 123.47];
+            const melodyPool = [
+              [220.0, 261.63, 329.63, 493.88, 659.25],
+              [174.61, 220.0, 261.63, 329.63, 523.25],
+              [146.83, 220.0, 261.63, 329.63, 440.0],
+              [164.81, 246.94, 293.66, 392.0, 493.88]
+            ];
+
+            const scheduleStep = () => {
+              if (!this.enabled || !this.ctx || this.ctx.state !== 'running') return;
+              const chordIdx = Math.floor(this.stepIndex / 4) % 4;
+              const beatInBar = this.stepIndex % 4;
+
+              if (beatInBar === 0 && this.padOscs.length >= 3) {
+                const now = this.ctx.currentTime;
+                this.padOscs[0].frequency.exponentialRampToValueAtTime(bassProgression[chordIdx], now + 1.2);
+                this.padOscs[1].frequency.exponentialRampToValueAtTime(fifthProgression[chordIdx], now + 1.2);
+                this.padOscs[2].frequency.exponentialRampToValueAtTime(bassProgression[chordIdx] * 2, now + 1.2);
+              }
+
+              const scale = melodyPool[chordIdx];
+              const notePattern = [0, 2, 4, 3, 1, 4, 2, 3];
+              const noteFreq = scale[notePattern[this.stepIndex % notePattern.length]];
+              this.playMusicNote(noteFreq, 2.6, 0.22, 'sine');
+
+              if (beatInBar === 0 || beatInBar === 2) {
+                const bassPulse = bassProgression[chordIdx];
+                this.playMusicNote(bassPulse, 2.2, 0.16, 'triangle');
+              }
+
+              if (beatInBar === 2) {
+                const shimmerFreq = scale[(this.stepIndex + 2) % scale.length] * 2;
+                setTimeout(() => {
+                  this.playMusicNote(shimmerFreq, 2.1, 0.11, 'triangle');
+                }, 420);
+              }
+
+              this.stepIndex += 1;
+            };
+
+            setTimeout(scheduleStep, 300);
+            this.musicTimer = setInterval(scheduleStep, 1350);
+          },
+
+          stopBackgroundMusic: function () {
+            if (this.musicTimer) {
+              clearInterval(this.musicTimer);
+              this.musicTimer = null;
+            }
+          },
+
+          playBootChime: function () {
+            this.initContext();
+            if (!this.ctx) return;
+
+            const now = this.ctx.currentTime;
+            this.enabled = true;
+            this.masterGain.gain.cancelScheduledValues(now);
+            this.masterGain.gain.setValueAtTime(Math.max(0.0001, this.masterGain.gain.value), now);
+            this.masterGain.gain.exponentialRampToValueAtTime(0.68, now + 0.25);
+
+            const subOsc = this.ctx.createOscillator();
+            const subGain = this.ctx.createGain();
+            subOsc.type = 'sine';
+            subOsc.frequency.setValueAtTime(110, now);
+            subGain.gain.setValueAtTime(0.0001, now);
+            subGain.gain.exponentialRampToValueAtTime(0.28, now + 0.4);
+            subGain.gain.exponentialRampToValueAtTime(0.0001, now + 2.9);
+            subOsc.connect(subGain);
+            subGain.connect(this.masterGain);
+            subOsc.start(now);
+            subOsc.stop(now + 3.0);
+
+            const chordFilter = this.ctx.createBiquadFilter();
+            chordFilter.type = 'lowpass';
+            chordFilter.frequency.setValueAtTime(800, now);
+            chordFilter.frequency.exponentialRampToValueAtTime(4200, now + 0.5);
+            chordFilter.frequency.exponentialRampToValueAtTime(1500, now + 3.2);
+            chordFilter.connect(this.masterGain);
+
+            const notes = [220.0, 329.63, 493.88, 659.25, 880.0];
+            notes.forEach((freq, idx) => {
+              const osc = this.ctx.createOscillator();
+              const gain = this.ctx.createGain();
+              const startOffset = now + idx * 0.08;
+              osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+              osc.frequency.setValueAtTime(freq, startOffset);
+
+              gain.gain.setValueAtTime(0.0001, startOffset);
+              gain.gain.exponentialRampToValueAtTime(0.18, startOffset + 0.18);
+              gain.gain.exponentialRampToValueAtTime(0.0001, startOffset + 3.0);
+
+              osc.connect(gain);
+              gain.connect(chordFilter);
+              osc.start(startOffset);
+              osc.stop(startOffset + 3.1);
+            });
+
+            this.startBackgroundMusic();
+            updateSoundButtonUI();
+          },
+
+          toggle: function () {
+            if (!this.ctx) {
+              this.initContext();
+            }
+            if (!this.ctx) return;
+            const now = this.ctx.currentTime;
+            this.enabled = !this.enabled;
+            this.masterGain.gain.cancelScheduledValues(now);
+            this.masterGain.gain.setValueAtTime(Math.max(0.0001, this.masterGain.gain.value), now);
+            if (this.enabled) {
+              if (this.ctx.state === 'suspended') this.ctx.resume();
+              this.masterGain.gain.exponentialRampToValueAtTime(0.68, now + 0.4);
+              this.startBackgroundMusic();
+              this.playWhoosh();
+            } else {
+              this.stopBackgroundMusic();
+              this.masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+            }
+            updateSoundButtonUI();
+          },
+
+          playMicroTick: function () {
+            if (!this.enabled || !this.ctx || this.ctx.state !== 'running') return;
+            const perfNow = performance.now();
+            if (perfNow - this.lastTickAt < 65) return;
+            this.lastTickAt = perfNow;
+
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1850, now);
+            osc.frequency.exponentialRampToValueAtTime(1150, now + 0.045);
+
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.exponentialRampToValueAtTime(0.11, now + 0.008);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+
+            osc.connect(gain);
+            gain.connect(this.masterGain);
+            osc.start(now);
+            osc.stop(now + 0.055);
+          },
+
+          playWhoosh: function () {
+            if (!this.enabled || !this.ctx || !this.noiseBuffer || this.ctx.state !== 'running') return;
+            const now = this.ctx.currentTime;
+            const src = this.ctx.createBufferSource();
+            src.buffer = this.noiseBuffer;
+
+            const filter = this.ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.Q.setValueAtTime(1.8, now);
+            filter.frequency.setValueAtTime(280, now);
+            filter.frequency.exponentialRampToValueAtTime(1400, now + 0.25);
+            filter.frequency.exponentialRampToValueAtTime(340, now + 0.55);
+
+            const gain = this.ctx.createGain();
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.exponentialRampToValueAtTime(0.22, now + 0.16);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+
+            src.connect(filter);
+            filter.connect(gain);
+            gain.connect(this.masterGain);
+            src.start(now);
+            src.stop(now + 0.6);
+          }
+        };
+
+        // 4. DOM References
+        const entryCurtain = document.getElementById('entry-curtain');
+        const enterWithSoundBtn = document.getElementById('enter-with-sound');
+        const enterSilentlyBtn = document.getElementById('enter-silently');
+        const soundToggleBtn = document.getElementById('sound-toggle');
+        const menuToggleBtn = document.getElementById('menu-toggle');
+        const navOverlay = document.getElementById('nav-overlay');
+        const marqueeTrack = document.getElementById('marquee-track');
+        const destinationGrid = document.getElementById('destination-grid');
+        const footerDestLinks = document.getElementById('footer-dest-links');
+        const briefingModal = document.getElementById('briefing-modal');
+        const modalCloseBtn = document.getElementById('modal-close');
+        const shanghaiClockEl = document.getElementById('shanghai-clock');
+        const overlayClockEl = document.getElementById('overlay-clock');
+        const statementSection = document.getElementById('statement');
+
+        function updateSoundButtonUI() {
+          soundToggleBtn.textContent = audioEngine.enabled ? 'SOUND: ON' : 'SOUND: OFF';
+          soundToggleBtn.setAttribute('aria-pressed', audioEngine.enabled ? 'true' : 'false');
+        }
+
+        // 5. Render Marquee, Grid, and Footer Destination Links
+        const marqueeShapes = ['marquee-shape-a', 'marquee-shape-b', 'marquee-shape-c'];
+
+        function createMarqueeGroup(isDuplicate) {
+          const group = document.createElement('div');
+          group.className = 'marquee-group';
+          if (isDuplicate) {
+            group.setAttribute('aria-hidden', 'true');
+          }
+
+          DESTINATIONS.forEach((dest, idx) => {
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = 'marquee-card';
+            if (isDuplicate) {
+              card.tabIndex = -1;
+            } else {
+              card.setAttribute('aria-label', 'Buka ringkasan ' + dest.title);
+            }
+            card.dataset.destId = dest.id;
+
+            const shapeClass = marqueeShapes[idx % 3];
+            card.innerHTML =
+              '<div class="marquee-media ' +
+              shapeClass +
+              '">' +
+              '<img class="editorial-photo" src="' +
+              dest.image +
+              '" alt="' +
+              dest.alt +
+              '" loading="eager" referrerpolicy="no-referrer" />' +
+              '</div>' +
+              '<div class="marquee-caption">' +
+              '<span class="marquee-title">' +
+              dest.title +
+              '</span>' +
+              '<span class="marquee-code mono-meta">' +
+              dest.code +
+              '</span>' +
+              '</div>';
+
+            const imgEl = card.querySelector('img');
+            imgEl.onerror = function () {
+              window.handleImageFallback(imgEl, dest.title, dest.code, idx);
+            };
+            card.addEventListener('click', function () {
+              openModal(dest.id);
+            });
+            group.appendChild(card);
+          });
+
+          return group;
+        }
+
+        marqueeTrack.appendChild(createMarqueeGroup(false));
+        marqueeTrack.appendChild(createMarqueeGroup(true));
+
+        DESTINATIONS.forEach((dest, idx) => {
+          // Grid Card
+          const card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'destination-card';
+          card.id = 'sector-' + dest.id;
+          card.setAttribute('aria-label', 'Lihat panduan lengkap ' + dest.title);
+
+          card.innerHTML =
+            '<div class="destination-media">' +
+            '<img class="editorial-photo" src="' +
+            dest.image +
+            '" alt="' +
+            dest.alt +
+            '" loading="lazy" referrerpolicy="no-referrer" />' +
+            '<div class="destination-overlay" aria-hidden="true"></div>' +
+            '<span class="card-arrow-badge" aria-hidden="true">' +
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25">' +
+            '<line x1="7" y1="17" x2="17" y2="7"></line>' +
+            '<polyline points="7 7 17 7 17 17"></polyline>' +
+            '</svg>' +
+            '</span>' +
+            '</div>' +
+            '<div class="destination-meta-row">' +
+            '<div>' +
+            '<h3 class="destination-title">' +
+            dest.title +
+            '</h3>' +
+            '<p class="destination-category">' +
+            dest.category +
+            '</p>' +
+            '</div>' +
+            '<span class="destination-code mono-meta">' +
+            dest.code +
+            '</span>' +
+            '</div>';
+
+          const imgEl = card.querySelector('img');
+          imgEl.onerror = function () {
+            window.handleImageFallback(imgEl, dest.title, dest.code, idx);
+          };
+          card.addEventListener('click', function () {
+            openModal(dest.id);
+          });
+          destinationGrid.appendChild(card);
+
+          // Footer Link
+          const li = document.createElement('li');
+          const link = document.createElement('a');
+          link.href = '#sector-' + dest.id;
+          link.className = 'footer-link';
+          link.textContent = dest.title;
+          link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.getElementById('sector-' + dest.id);
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          });
+          li.appendChild(link);
+          footerDestLinks.appendChild(li);
+        });
+
+        // 6. Entry Curtain & Reveal Lifecycle
+        function dismissCurtain(withSound) {
+          if (withSound) {
+            audioEngine.playBootChime();
+          }
+          entryCurtain.classList.add('is-dismissed');
+          entryCurtain.setAttribute('aria-hidden', 'true');
+          document.body.classList.remove('is-locked');
+          requestAnimationFrame(function () {
+            setTimeout(function () {
+              document.body.classList.add('is-revealed');
+            }, 80);
+          });
+        }
+
+        enterWithSoundBtn.addEventListener('click', function () {
+          dismissCurtain(true);
+        });
+
+        enterSilentlyBtn.addEventListener('click', function () {
+          dismissCurtain(false);
+        });
+
+        soundToggleBtn.addEventListener('click', function () {
+          audioEngine.toggle();
+        });
+
+        // Support ?autostart=1 for immediate inspection
+        if (window.location.search.indexOf('autostart=1') !== -1) {
+          entryCurtain.style.transition = 'none';
+          dismissCurtain(false);
+        }
+
+        // 7. Navigation Overlay
+        function setMenuOpen(open) {
+          menuToggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          navOverlay.classList.toggle('is-open', open);
+          navOverlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+          if (open) {
+            audioEngine.playWhoosh();
+            document.body.classList.add('is-locked');
+          } else if (!briefingModal.classList.contains('is-open')) {
+            document.body.classList.remove('is-locked');
+          }
+        }
+
+        menuToggleBtn.addEventListener('click', function () {
+          const isOpen = menuToggleBtn.getAttribute('aria-expanded') === 'true';
+          setMenuOpen(!isOpen);
+        });
+
+        navOverlay.querySelectorAll('.nav-link').forEach((link) => {
+          link.addEventListener('click', function () {
+            setMenuOpen(false);
+          });
+        });
+
+        // 8. Destination Briefing Modal
+        let lastFocusedEl = null;
+
+        function openModal(destId) {
+          const destIndex = DESTINATIONS.findIndex((d) => d.id === destId);
+          if (destIndex === -1) return;
+          const dest = DESTINATIONS[destIndex];
+          lastFocusedEl = document.activeElement;
+
+          document.getElementById('modal-code').textContent = dest.code;
+          document.getElementById('modal-title').textContent = dest.title;
+          document.getElementById('modal-category').textContent = dest.category;
+          document.getElementById('modal-description').textContent = dest.architecture;
+          document.getElementById('modal-best-time').textContent = dest.bestTime;
+          document.getElementById('modal-metro').textContent = dest.metro;
+
+          const modalImg = document.getElementById('modal-image');
+          modalImg.dataset.fallbackApplied = 'false';
+          modalImg.src = dest.image;
+          modalImg.alt = dest.alt;
+          modalImg.onerror = function () {
+            window.handleImageFallback(modalImg, dest.title, dest.code, destIndex);
+          };
+
+          const highlightsEl = document.getElementById('modal-highlights');
+          highlightsEl.innerHTML = '';
+          dest.highlights.forEach((item) => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            highlightsEl.appendChild(li);
+          });
+
+          audioEngine.playWhoosh();
+          briefingModal.classList.add('is-open');
+          briefingModal.setAttribute('aria-hidden', 'false');
+          document.body.classList.add('is-locked');
+          modalCloseBtn.focus();
+        }
+
+        function closeModal() {
+          if (!briefingModal.classList.contains('is-open')) return;
+          briefingModal.classList.remove('is-open');
+          briefingModal.setAttribute('aria-hidden', 'true');
+          if (menuToggleBtn.getAttribute('aria-expanded') !== 'true') {
+            document.body.classList.remove('is-locked');
+          }
+          if (lastFocusedEl && typeof lastFocusedEl.focus === 'function') {
+            lastFocusedEl.focus();
+          }
+        }
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        briefingModal.addEventListener('click', function (e) {
+          if (e.target === briefingModal) {
+            closeModal();
+          }
+        });
+
+        window.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            if (briefingModal.classList.contains('is-open')) {
+              closeModal();
+            } else if (menuToggleBtn.getAttribute('aria-expanded') === 'true') {
+              setMenuOpen(false);
+            }
+          }
+        });
+
+        // 9. Statement Masked Line Reveal
+        if ('IntersectionObserver' in window) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('is-inview');
+                  observer.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.15 }
+          );
+          observer.observe(statementSection);
+        } else {
+          statementSection.classList.add('is-inview');
+        }
+
+        // 10. Real-Time Shanghai Standard Time (CST / UTC+8) Telemetry
+        function formatShanghaiClock(date) {
+          const shanghaiMs = date.getTime() + 8 * 60 * 60 * 1000;
+          const sh = new Date(shanghaiMs);
+          const hh = String(sh.getUTCHours()).padStart(2, '0');
+          const mm = String(sh.getUTCMinutes()).padStart(2, '0');
+          const ss = String(sh.getUTCSeconds()).padStart(2, '0');
+          return hh + ':' + mm + ':' + ss + ' CST';
+        }
+
+        function updateTelemetryClock() {
+          const nowStr = formatShanghaiClock(new Date());
+          if (shanghaiClockEl) shanghaiClockEl.textContent = nowStr;
+          if (overlayClockEl) overlayClockEl.textContent = nowStr;
+        }
+        updateTelemetryClock();
+        setInterval(updateTelemetryClock, 1000);
+
+        // 11. Custom Interactive Difference Cursor + Hover Micro-Tick
+        const cursorEl = document.getElementById('custom-cursor');
+        const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+        if (isFinePointer && cursorEl) {
+          let targetX = -100;
+          let targetY = -100;
+          let currentX = -100;
+          let currentY = -100;
+          let isHoveringInteractive = false;
+          let scaleFrom = 1;
+          let scaleTo = 1;
+          let currentScale = 1;
+          let scaleAnimStart = 0;
+          const SCALE_DURATION = 500;
+
+          function editorialEase(t) {
+            const c = Math.max(0, Math.min(1, t));
+            return 1 - Math.pow(1 - c, 4);
+          }
+
+          function refreshCursorHoverState() {
+            if (targetX < 0 || targetY < 0) return;
+            const under = document.elementFromPoint(targetX, targetY);
+            const interactive = under
+              ? under.closest('a, button, .destination-card, .marquee-card')
+              : null;
+            const shouldHover = Boolean(interactive && !interactive.closest('[aria-hidden="true"]'));
+            if (shouldHover !== isHoveringInteractive) {
+              isHoveringInteractive = shouldHover;
+              scaleFrom = currentScale;
+              scaleTo = shouldHover ? 2.5 : 1;
+              scaleAnimStart = performance.now();
+            }
+          }
+
+          window.addEventListener('scroll', refreshCursorHoverState, { passive: true });
+          [enterWithSoundBtn, enterSilentlyBtn, menuToggleBtn, modalCloseBtn].forEach((btn) => {
+            if (btn) {
+              btn.addEventListener('click', function () {
+                setTimeout(refreshCursorHoverState, 60);
+              });
+            }
+          });
+
+          window.addEventListener('mousemove', function (e) {
+            targetX = e.clientX;
+            targetY = e.clientY;
+            if (!cursorEl.classList.contains('is-visible')) {
+              currentX = targetX;
+              currentY = targetY;
+              cursorEl.classList.add('is-visible');
+            }
+          });
+
+          document.addEventListener('mouseover', function (e) {
+            const interactive = e.target.closest('a, button, .destination-card, .marquee-card');
+            if (interactive) {
+              if (!isHoveringInteractive) {
+                isHoveringInteractive = true;
+                scaleFrom = currentScale;
+                scaleTo = 2.5;
+                scaleAnimStart = performance.now();
+                audioEngine.playMicroTick();
+              }
+            }
+          });
+
+          document.addEventListener('mouseout', function (e) {
+            const interactive = e.target.closest('a, button, .destination-card, .marquee-card');
+            if (interactive) {
+              const related = e.relatedTarget
+                ? e.relatedTarget.closest('a, button, .destination-card, .marquee-card')
+                : null;
+              if (!related && isHoveringInteractive) {
+                isHoveringInteractive = false;
+                scaleFrom = currentScale;
+                scaleTo = 1;
+                scaleAnimStart = performance.now();
+              }
+            }
+          });
+
+          function animateCursor(now) {
+            currentX += (targetX - currentX) * 0.15;
+            currentY += (targetY - currentY) * 0.15;
+
+            if (currentScale !== scaleTo) {
+              const progress = (now - scaleAnimStart) / SCALE_DURATION;
+              if (progress >= 1) {
+                currentScale = scaleTo;
+              } else {
+                currentScale = scaleFrom + (scaleTo - scaleFrom) * editorialEase(progress);
+              }
+            }
+
+            cursorEl.style.transform =
+              'translate3d(' +
+              (currentX - 16).toFixed(2) +
+              'px, ' +
+              (currentY - 16).toFixed(2) +
+              'px, 0) scale(' +
+              currentScale.toFixed(3) +
+              ')';
+
+            requestAnimationFrame(animateCursor);
+          }
+
+          requestAnimationFrame(animateCursor);
+        }
+      })();
+    </script>
+  </body>
+</html>
