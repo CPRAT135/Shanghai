@@ -1324,7 +1324,7 @@
             title: 'Lujiazui & Shanghai Tower',
             category: 'Skyline / Pudong Financial District',
             code: '2099 SECTOR 01',
-            image: '/images/shanghai_lujiazui_tower_1794638679436.jpg',
+            image: './images/shanghai_lujiazui_tower_1794638679436.jpg',
             alt: 'Panoramic view of Lujiazui skyline and Shanghai Tower at dusk',
             overview:
               'Rising 632 meters above the Pudong peninsula, Shanghai Tower offers one of the highest viewpoints on Earth. Surrounded by vibrant plazas, elevated walkways, and neighboring landmarks like Jin Mao Tower, Lujiazui is the ultimate stop to experience Shanghai’s modern energy from street level to the clouds.',
@@ -1341,7 +1341,7 @@
             title: 'The Bund (Waitan)',
             category: 'Waterfront / Huangpu River Promenade',
             code: '31.2397° N',
-            image: '/images/shanghai_the_bund_1794638680117.jpg',
+            image: './images/shanghai_the_bund_1794638680117.jpg',
             alt: 'The Bund waterfront promenade in Shanghai overlooking the Pudong skyline',
             overview:
               'Stretching 1.5 kilometers along the western bank of the Huangpu River, The Bund is Shanghai’s most iconic waterfront walk. With cool river breezes on one side and grand historic avenues on the other, this promenade brings together morning tai chi locals, evening travelers, and unmatched views of the glowing Pudong skyline across the water.',
@@ -1358,7 +1358,7 @@
             title: 'Yu Garden (Yuyuan)',
             category: 'Heritage Oasis / Old City',
             code: 'MING 1559',
-            image: '/images/shanghai_yu_garden_1794638680704.jpg',
+            image: './images/shanghai_yu_garden_1794638680704.jpg',
             alt: 'Traditional Ming Dynasty pavilions and winding pond bridges at Yu Garden in Shanghai',
             overview:
               'Dating back to 1559 during the Ming Dynasty, Yu Garden is a peaceful sanctuary tucked inside Shanghai’s bustling Old City. Winding pathways lead visitors past koi-filled lotus ponds, shady rockeries, and serene courtyards, right beside the lively Yuyuan Bazaar famous for local snacks and handmade crafts.',
@@ -1375,7 +1375,7 @@
             title: 'Nanjing Road Pedestrian',
             category: 'City Pulse / Central Promenade',
             code: '5.5KM STRIP',
-            image: '/images/shanghai_nanjing_road_1794638681080.jpg',
+            image: './images/shanghai_nanjing_road_1794638681080.jpg',
             alt: 'Nanjing Road Pedestrian Street in central Shanghai illuminated at dusk',
             overview:
               'As China’s busiest shopping and walking avenue, Nanjing Road captures the nonstop energy of downtown Shanghai. Stretching from People’s Square toward The Bund, this car-free boulevard is packed with flagship boutiques, century-old pastry shops, street life, and dazzling neon signs that light up the night.',
@@ -1392,7 +1392,7 @@
             title: '1933 Old Millfun',
             category: 'Creative Hub / Hongkou District',
             code: '1933 HUB',
-            image: '/images/shanghai_old_millfun_1794638681603.jpg',
+            image: './images/shanghai_old_millfun_1794638681603.jpg',
             alt: 'Multi-level walkways and spiral staircases inside 1933 Old Millfun in Shanghai',
             overview:
               'Tucked away in Hongkou District, 1933 Old Millfun has been reborn from a historic 1930s landmark into one of Shanghai’s most atmospheric cultural hangouts. Today its dramatic multi-level walkways, sunlit central court, and maze-like corridors house independent cafés, boutique studios, creative markets, and intimate performance spaces.',
@@ -1409,7 +1409,7 @@
             title: 'Zhujiajiao Water Town',
             category: 'Canal Escape / Qingpu District',
             code: 'JIANGNAN',
-            image: '/images/shanghai_zhujiajiao_canal_1794638681851.jpg',
+            image: './images/shanghai_zhujiajiao_canal_1794638681851.jpg',
             alt: 'Five-arch stone bridge and tranquil waterways in Zhujiajiao Water Town, Shanghai',
             overview:
               'Located on the southwestern edge of Shanghai, Zhujiajiao is a 1,700-year-old canal town that feels worlds away from the city’s skyscrapers. Visitors can wander narrow stone alleys, browse waterside teahouses, cross 36 ancient bridges, and drift past lantern-lit lanes aboard traditional wooden rowboats.',
@@ -1466,6 +1466,21 @@
 
         window.handleImageFallback = function (imgEl, title, code, index) {
           if (!imgEl || imgEl.dataset.fallbackApplied === 'true') return;
+
+          const filename = (imgEl.getAttribute('src') || '').split('/').pop();
+          const stage = parseInt(imgEl.dataset.fallbackStage || '0', 10);
+
+          if (filename && stage === 0) {
+            imgEl.dataset.fallbackStage = '1';
+            imgEl.src = './public/images/' + filename;
+            return;
+          }
+          if (filename && stage === 1) {
+            imgEl.dataset.fallbackStage = '2';
+            imgEl.src = './src/assets/images/' + filename;
+            return;
+          }
+
           imgEl.dataset.fallbackApplied = 'true';
           imgEl.src = buildFallbackSvg(title, code, index);
         };
@@ -1836,7 +1851,7 @@
               dest.image +
               '" alt="' +
               dest.alt +
-              '" loading="eager" referrerpolicy="no-referrer" />' +
+              '" loading="eager" />' +
               '</div>' +
               '<div class="marquee-caption">' +
               '<span class="marquee-title">' +
@@ -1877,7 +1892,7 @@
             dest.image +
             '" alt="' +
             dest.alt +
-            '" loading="lazy" referrerpolicy="no-referrer" />' +
+            '" loading="lazy" />' +
             '<div class="destination-overlay" aria-hidden="true"></div>' +
             '<span class="card-arrow-badge" aria-hidden="true">' +
             '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25">' +
@@ -2001,6 +2016,7 @@
 
           const modalImg = document.getElementById('modal-image');
           modalImg.dataset.fallbackApplied = 'false';
+          modalImg.dataset.fallbackStage = '0';
           modalImg.src = dest.image;
           modalImg.alt = dest.alt;
           modalImg.onerror = function () {
